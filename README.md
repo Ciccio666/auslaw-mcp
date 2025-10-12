@@ -1,12 +1,28 @@
 # AusLaw MCP
 
-Model Context Protocol (MCP) server that locates Australian primary sources of law, surfaces neutral citation fallbacks, and extracts full-text content with OCR support for archival PDFs. Designed to complement StudGent-style legal workflows with portable deployment options (Node.js or container).
+Model Context Protocol (MCP) server for Australian legal research. Searches AustLII for case law and legislation, retrieves full-text judgements with paragraph numbers preserved, and supports OCR for scanned PDFs.
+
+**Status**: ✅ Working MVP | 🚧 [Improving search relevance](https://github.com/russellbrenner/auslaw-mcp/issues/2)
 
 ## Features
-- Legislation and case law search prioritising Commonwealth and Victorian sources.
-- Structured results with reported and neutral citation metadata.
-- Full-text retrieval for HTML and PDF sources, with Tesseract OCR fallback when PDFs lack embedded text.
-- Portable runtime: Node.js 20+ or Docker container image.
+
+### Current Capabilities
+- ✅ **Case law search**: Natural language queries (e.g., "negligence duty of care")
+- ✅ **Legislation search**: Find Australian Commonwealth and State legislation
+- ✅ **Primary sources only**: Filters out journal articles and commentary
+- ✅ **Citation extraction**: Extracts neutral citations like `[2025] HCA 26`
+- ✅ **Paragraph preservation**: Keeps `[N]` paragraph numbers for pinpoint citations
+- ✅ **Multiple formats**: JSON, text, markdown, or HTML output
+- ✅ **Document retrieval**: Full text from HTML and PDF sources
+- ✅ **OCR support**: Tesseract OCR fallback for scanned PDFs
+
+### Limitations & Roadmap
+- 🚧 **Search relevance**: Currently sorts by date; case name searches need relevance sorting ([#2](https://github.com/russellbrenner/auslaw-mcp/issues/2))
+- 🔜 **Multi-source**: Will add jade.io for reported judgements
+- 🔜 **Page numbers**: Will extract page numbers from reported versions
+- 🔜 **Authority ranking**: Will prioritise reported over unreported judgements
+
+See [ROADMAP.md](docs/ROADMAP.md) for detailed development plans.
 
 ## Quick Start
 ```bash
@@ -116,9 +132,40 @@ Fetch full text from a legislation or case URL. Supports HTML and PDF with OCR f
 - ✅ Neutral citation and jurisdiction extraction
 - ✅ Multiple output formats (JSON, text, markdown, HTML)
 
+## Contributing
+
+See [AGENTS.md](AGENTS.md) for AI agent instructions and development guidelines.
+
+**Key principles**:
+- Primary sources only (no journal articles)
+- Citation accuracy is paramount
+- All tests must pass before committing
+- Real-world testing (hits live AustLII)
+
+## Project Structure
+
+```
+src/
+├── index.ts              # MCP server & tool registration
+├── services/
+│   ├── austlii.ts       # AustLII search integration
+│   └── fetcher.ts       # Document text retrieval
+├── utils/
+│   └── formatter.ts     # Output formatting
+└── test/
+    └── scenarios.test.ts # Integration tests
+```
+
 ## Roadmap
-- Add secondary sources (eg. LawCite) for fallback metadata
-- Package Docker image with Tesseract OCR pre-installed
-- Expand unit tests and integration coverage with recorded fixtures
-- Add better jurisdiction filtering
-- Support for more specific search parameters (date ranges, court levels, etc.)
+
+See [docs/ROADMAP.md](docs/ROADMAP.md) and [Issue #2](https://github.com/russellbrenner/auslaw-mcp/issues/2) for detailed development plans.
+
+**Next priorities**:
+1. Fix search relevance for case name queries
+2. Add jade.io integration for reported judgements
+3. Extract page numbers for pinpoint citations
+4. Implement authority-based result ranking
+
+## License
+
+MIT
