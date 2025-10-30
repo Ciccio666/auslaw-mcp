@@ -236,14 +236,16 @@ function boostTitleMatches(results: SearchResult[], query: string): SearchResult
     const vMatch = query.match(/(\w+)\s+v\.?\s+(\w+)/i);
     if (vMatch) {
       const [, party1, party2] = vMatch;
-      const party1Lower = party1.toLowerCase();
-      const party2Lower = party2.toLowerCase();
+      if (party1 && party2) {
+        const party1Lower = party1.toLowerCase();
+        const party2Lower = party2.toLowerCase();
 
-      // Check if both parties appear in title
-      if (normalizedTitle.includes(party1Lower) && normalizedTitle.includes(party2Lower)) {
-        score += 100; // Strong boost for matching both parties
-      } else if (normalizedTitle.includes(party1Lower) || normalizedTitle.includes(party2Lower)) {
-        score += 20; // Smaller boost for one party
+        // Check if both parties appear in title
+        if (normalizedTitle.includes(party1Lower) && normalizedTitle.includes(party2Lower)) {
+          score += 100; // Strong boost for matching both parties
+        } else if (normalizedTitle.includes(party1Lower) || normalizedTitle.includes(party2Lower)) {
+          score += 20; // Smaller boost for one party
+        }
       }
     }
 
